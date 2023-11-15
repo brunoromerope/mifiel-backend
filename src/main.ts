@@ -7,6 +7,8 @@ async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   const appService = app.get(AppService);
 
+  app.enableCors();
+
   Config.setTokens({
     appId: appService.getAPP_ID(),
     appSecret: appService.getAPP_SECRET(),
