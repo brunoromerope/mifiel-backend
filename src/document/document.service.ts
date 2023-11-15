@@ -8,6 +8,7 @@ import * as path from 'path';
 @Injectable()
 export class DocumentService {
   
+  // Fetch all Mifiel documents
   async findAll(): Promise<any>{
     const documents = await Document.all();
     const docs = documents.map((document) => ({
@@ -19,6 +20,7 @@ export class DocumentService {
     return docs;
   }
 
+  // Fetch a Mifiel document by id and add files path
   async findOne(id: string): Promise<any> {
     const document = await Document.find(id);
     const filePath = await this.readFile(document.file_file_name, document.external_id);

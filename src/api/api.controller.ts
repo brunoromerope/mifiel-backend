@@ -8,16 +8,10 @@ import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
 export class ApiController {
   constructor(private readonly apiService: ApiService) {}
 
-  @UseGuards(JwtAuthGuard)
-  @Get()
-  test() {
-    return 'Hello There';
-  }
-
+  // Webhook for completed documents
   @Post()
   callback_url(@Req() request: Request, @Res() response: Response) {
-    
-    return this.apiService.getStatus(request, response);
+    return this.apiService.getDocuments(request, response);
   }
 
   //@UseGuards(JwtAuthGuard)

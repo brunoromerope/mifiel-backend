@@ -14,7 +14,8 @@ export class AuthService {
     @InjectModel(Users.name) private userModel: Model<Users>,
     private jwtService: JwtService
     ) {}
-
+  
+  // Create new user
   async register(createAuthDto: CreateAuthDto) {
       try{
         const { password } = createAuthDto;
@@ -33,6 +34,7 @@ export class AuthService {
     }
   }
 
+  // Login user with email and password
   async login(loginUserDto: LoginDto): Promise<any> {
       const { email, password } = loginUserDto;
       
@@ -59,19 +61,4 @@ export class AuthService {
       return data;
   }
 
-  findAll() {
-    return `This action returns all auth`;
-  }
-
-  findOne(id: number) {
-    return `This action returns a #${id} auth`;
-  }
-
-  update(id: number, updateAuthDto: UpdateAuthDto) {
-    return `This action updates a #${id} auth`;
-  }
-
-  remove(id: number) {
-    return `This action removes a #${id} auth`;
-  }
 }

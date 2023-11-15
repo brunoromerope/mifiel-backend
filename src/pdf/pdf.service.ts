@@ -34,17 +34,26 @@ export class PdfService {
             const stream = fs.createWriteStream(filePath);
             doc.pipe(stream);
             
+            // Listener for new data
             doc.on('data', (chunk)  =>{
                 buffers.push.bind(buffers);
                 hash.update(chunk);
             });
+
+            // Listener for end of file
             doc.on('end', () => {
                 const pdfData = Buffer.concat(buffers);
+                
+                // Calculate hash using Crypto library
                 const fileHash = hash.digest('hex');
-                console.log('Crypto',fileHash);
+                console.log('Crypto', fileHash);
+
+                // Save pdf in path and return variables
                 fs.writeFileSync(filePath, pdfData);
                 resolve({filePath, fileName, fileHash});
             });
+
+            // Listener for errors
             doc.on('error', err => {
                 reject(err)
             });
@@ -57,6 +66,8 @@ export class PdfService {
     }
 
     async getHash(filePath: string): Promise<string> {
+        
+        // Calculate hash from pdf document using Mifiel library
         const fileBuffer = fs.readFileSync(filePath);
         const hexHash = await Document.getHash(fileBuffer);
         
@@ -77,10 +88,12 @@ export class PdfService {
     async createDocument(filePath: string, fileName: string, fileHash: string, external_id: string): Promise<any> {
         const hexHash = await this.getHash(filePath);
         console.log('Mifiel', hexHash);
+        
+        // Creating document in Mifiel
         const newDocument = await Document.create({
             original_hash: fileHash,
             name: fileName,
-            //file: filePath,
+            //file: filePath, // In case that we have to send the file
             signatories: [{
                 name: 'Bruno Romero',
                 email: 'bruno.romero.pe17@gmail.com',
@@ -90,7 +103,7 @@ export class PdfService {
             sign_callback_url: "http://192.141.125.8:6868/sign",
             external_id: external_id
         })
-        //console.log(newDocument);
+
         return newDocument;
     }
 }

@@ -14,20 +14,20 @@ import { ServeStaticModule } from '@nestjs/serve-static';
 import { join } from 'path';
 
 @Module({
-  imports: [ConfigModule.forRoot({
+  imports: [ConfigModule.forRoot({ // Import module to read .env file
     isGlobal: true,
-  }),MongooseModule.forRootAsync({
+  }),MongooseModule.forRootAsync({ // Import mongoose module to interact with database
     imports: [ConfigModule],
     useFactory: async(configService: ConfigService) => ({
-      uri: configService.get<string>('MONGO_URI'),
+      uri: configService.get<string>('MONGO_URI'), // Retrives database URI from .env
     }),
     inject: [ConfigService]
   }),
   ServeStaticModule.forRoot({
-    rootPath: join(__dirname, '..', 'dist-front'),
+    rootPath: join(__dirname, '..', 'dist-front'), // Serve static files for front-end
   }), 
   ApiModule, PdfModule, SignModule, DocumentModule, AuthModule],
   controllers: [AppController],
-  providers: [AppService,JwtService, JwtStrategy],
+  providers: [AppService,JwtService, JwtStrategy], // Use providers for authentication
 })
 export class AppModule {}

@@ -8,7 +8,7 @@ import * as fs from 'fs';
 @Injectable()
 export class ApiService {
 
-    async getStatus(request: Request, response: Response): Promise<any>{
+    async getDocuments(request: Request, response: Response): Promise<any>{
         console.log('Callback ...');
         console.log(request.body);
         
